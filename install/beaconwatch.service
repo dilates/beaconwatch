@@ -1,0 +1,40 @@
+# beaconwatch systemd unit — copy to /etc/systemd/system/beaconwatch.service
+# Enable and start: sudo systemctl enable --now beaconwatch
+
+[Unit]
+Description=beaconwatch — passive C2 beaconing detector
+Documentation=https://github.com/dilates/beaconwatch
+After=network.target
+
+[Service]
+Type=simple
+User=root
+
+# Change this to match your installation path
+ExecStart=/usr/local/bin/beaconwatch daemon --foreground
+
+# Restart on failure (not on clean exit)
+Restart=on-failure
+RestartSec=5s
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/root/.local/share/beaconwatch /var/log
+ProtectHome=read-only
+
+# Allow access to /proc for process resolution
+ProcSubset=all
+
+# CAP_NET_ADMIN is required for conntrack netlink events
+# If not running as root, use:
+#   AmbientCapabilities=CAP_NET_ADMIN
+#   CapabilityBoundingSet=CAP_NET_ADMIN
+#   User=beaconwatch  (a dedicated system user)
+#
+# To create the service user:
+#   sudo useradd -r -s /bin/false beaconwatch
+#   sudo setcap cap_net_admin+ep $(which beaconwatch)
+
+[Install]
+WantedBy=multi-user.target
