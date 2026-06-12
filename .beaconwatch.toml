@@ -1,0 +1,45 @@
+# beaconwatch configuration — copy to ~/.config/beaconwatch/config.toml or keep here
+# All values shown are defaults.
+
+[beaconwatch]
+# Where beaconwatch stores its database and logs
+data_dir = "~/.local/share/beaconwatch"
+
+# Minimum number of connections to a destination before scoring begins
+min_samples = 5
+
+# Rolling window size for timestamps per flow (older entries are dropped)
+max_history_per_flow = 200
+
+# How many hours of inactivity before a flow is pruned from memory
+flow_stale_hours = 24
+
+# How many days to retain raw connection records in the database
+connection_retention_days = 7
+
+# If true, also track connections to RFC1918/LAN destinations (more noise, catches internal C2)
+include_lan_traffic = false
+
+[beaconwatch.alerts]
+# Enable desktop notifications via notify-send (libnotify)
+desktop_enabled = true
+
+# Webhook URL to POST JSON alerts to (empty = disabled)
+webhook_url = ""
+
+# Set to true to enable webhook alerts (requires webhook_url to be set)
+webhook_enabled = false
+
+[beaconwatch.scoring]
+# Coefficient-of-variation thresholds for the beacon regularity score
+# Lower CV = more regular = more suspicious
+# These control how many points each regularity level earns
+
+# CV below this = extremely regular (near-perfect beacon): +50 points
+cv_threshold_high = 0.05
+
+# CV below this = highly regular (beaconing + bounded jitter): +35 points
+cv_threshold_medium = 0.15
+
+# CV below this = moderately regular: +15 points
+cv_threshold_low = 0.30
