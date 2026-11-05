@@ -229,4 +229,3 @@ pytest tests/ -v
 ```
 
 Tests cover: perfect beacon, jittered beacon, Poisson (random) traffic, edge cases (0/1/2 samples, outliers), scoring thresholds, and a full pipeline test against `tests/fixtures/sample_connections.json`.
- 
